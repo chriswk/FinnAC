@@ -14,7 +14,7 @@
             source: function (request, response) {
                 var userTerm = request.term;
                 $.ajax({
-                    url: "http://iad.finn.no:8080/finn/job/autocomplete/frontpage/jsonp",
+                    url: "http://dev.finn.no/finn/job/autocomplete/frontpage/jsonp",
                     data: {
                         rows: 5,
                         term: userTerm
