@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title>Autocomplete jsonp test</title>
+    <script src="jquery.js" type="text/javascript"></script>
+    <script src="jquery-ui-1.8.18.min.js" type="text/javascript"></script>
+    <script src="jquery.autocomplete.html.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+      $(document).ready(function() {
+       var autoSelector = "input[name=keyword]";
+      $(autoSelector).autocomplete({
+            html: true,
+            source: function (request, response) {
+                var userTerm = request.term;
+                $.ajax({
+                    url: "http://dev.finn.no/finn/job/autocomplete/frontpage/xhr",
+                    data: {
+                        rows: 5,
+                        term: userTerm
+                    },
+                    dataType: "jsonp",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            var ad = item.hits !== 1 ? "annonser" : "annonse";
+                            return {
+                                label: highLight(item.suggest, userTerm) + " <span class='pale fright'>(" + item.hits + " " + ad + ")</span>",
+                                value: item.suggest,
+                                hits: item.hits
+                            };
+
+                        })
+                            );
+                    }
+                });
+            },
+            select: function (event, ui) {
+                $(autoSelector).val(ui.item.value);
+                $(formSelector).submit();
+            }
+
+
+        });
+      });
+    </script>
+  </head>
+<body>
+  <form>
+    <input type="search" name="keyword" />
+  </form>
+</body>
+</html>
