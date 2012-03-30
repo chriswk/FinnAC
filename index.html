@@ -14,17 +14,18 @@
             source: function (request, response) {
                 var userTerm = request.term;
                 $.ajax({
-                    url: "http://dev.finn.no/finn/job/autocomplete/frontpage/xhr",
+                    url: "http://iad.finn.no:8080/finn/job/autocomplete/frontpage/jsonp",
                     data: {
                         rows: 5,
                         term: userTerm
                     },
+                    jsonp: "jsonp",
                     dataType: "jsonp",
                     success: function (data) {
-                        response($.map(data, function (item) {
+                        response($.map(data.result, function (item) {
                             var ad = item.hits !== 1 ? "annonser" : "annonse";
                             return {
-                                label: highLight(item.suggest, userTerm) + " <span class='pale fright'>(" + item.hits + " " + ad + ")</span>",
+                                label: item.suggest + " <span class='pale fright'>(" + item.hits + " " + ad + ")</span>",
                                 value: item.suggest,
                                 hits: item.hits
                             };
